@@ -1,0 +1,718 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Explorer</title>
+    <link rel="shortcut icon" href="{% static 'image/main.ico' %}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #08090bff;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .api-card {
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .api-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box {
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f3f4f6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark-mode {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        .dark-mode .nav-glass {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid #1e293b;
+        }
+        
+        .dark-mode .search-box {
+            background: #1e293b;
+            border: 2px solid #334155;
+        }
+        
+        .dark-mode .card-hover {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+        
+        .dark-mode .text-slate-300 {
+            color: #cbd5e1;
+        }
+        
+        .dark-mode .text-slate-400 {
+            color: #94a3b8;
+        }
+        
+        .dark-mode .text-slate-500 {
+            color: #64748b;
+        }
+        
+        .dark-mode .border-slate-800 {
+            border-color: #1e293b;
+        }
+        
+        .dark-mode .bg-slate-800 {
+            background-color: #1e293b;
+        }
+        
+        .dark-mode .bg-slate-900 {
+            background-color: #0f172a;
+        }
+        
+        .dark-mode .bg-slate-900\/50 {
+            background-color: rgba(15, 23, 42, 0.5);
+        }
+        
+        .dark-mode .hover\:bg-slate-700:hover {
+            background-color: #334155;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f3f4f6;
+        }
+        
+        .dark-mode .section-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        .dark-mode .btn-secondary {
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+        }
+        
+        .dark-mode .btn-secondary:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .dark-mode .stats-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-glass fixed top-0 w-full z-50 py-4">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div>
+                        <span class="text-2xl font-bold gradient-text">API HUB</span>
+                        <div class="text-xs text-slate-500 font-medium">For Developers</div>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#features" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Features</a>
+                    <a href="#categories" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Categories</a>
+                    <a href="#how-it-works" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">How it Works</a>
+                    <a href="{% url 'document' %}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Documentation</a>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-3 rounded-xl bg-gradient-to-br from-slate-100 to-white shadow-sm hover:shadow-md transition-all border border-slate-200 dark-mode:from-slate-800 dark-mode:to-slate-900 dark-mode:border-slate-700">
+                        <i class="fas fa-moon text-slate-700 dark-mode:text-slate-300"></i>
+                    </button>
+                    <a href="#cta" class="px-6 py-3 btn-primary rounded-xl font-medium shadow-sm">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-24 md:pt-40 md:pb-32">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="max-w-5xl mx-auto text-center">
+                
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
+                    <span class="block">Discover, Test &</span>
+                    <span class="gradient-text">Integrate APIs</span>
+                    <span class="block mt-2">In Minutes</span>
+                </h1>
+                
+                <p class="text-2xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed dark-mode:text-slate-300">
+                    API Explorer helps developers discover, test, and integrate thousands of APIs across all categories. Stop searching manually and start building faster.
+                </p>
+                
+                <div class="search-box max-w-3xl mx-auto rounded-2xl p-3 mb-12 dark-mode:border-slate-700">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="flex-1 flex items-center p-4">
+                            <i class="fas fa-search text-slate-400 ml-2 mr-4 text-lg"></i>
+                            <input type="text" placeholder="Search for APIs (e.g., 'payment processing', 'AI image generation', 'weather data')" class="w-full bg-transparent border-none focus:outline-none text-slate-800 placeholder-slate-500 py-2 text-lg dark-mode:text-slate-300 dark-mode:placeholder-slate-400">
+                        </div>
+                        <button class="px-8 py-4 btn-primary rounded-xl text-lg font-semibold shadow-sm">Search APIs</button>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-8 mb-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center dark-mode:bg-green-900/30">
+                            <i class="fas fa-check text-green-600 text-lg dark-mode:text-green-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-slate-900 dark-mode:text-white">3,000+</div>
+                            <div class="text-slate-600 dark-mode:text-slate-400">APIs Available</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center dark-mode:bg-blue-900/30">
+                            <i class="fas fa-bolt text-blue-600 text-lg dark-mode:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-slate-900 dark-mode:text-white">10x</div>
+                            <div class="text-slate-600 dark-mode:text-slate-400">Faster Integration</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center dark-mode:bg-purple-900/30">
+                            <i class="fas fa-users text-purple-600 text-lg dark-mode:text-purple-400"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-slate-900 dark-mode:text-white">50K+</div>
+                            <div class="text-slate-600 dark-mode:text-slate-400">Developers</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#cta" class="px-10 py-5 btn-primary rounded-2xl text-lg font-bold shadow-lg">Start Exploring APIs</a>
+                    <a href="#" class="px-10 py-5 btn-secondary rounded-2xl text-lg font-bold">Watch Demo <i class="fas fa-play ml-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Everything You Need to Work with APIs</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto dark-mode:text-slate-300">A unified platform designed specifically for developers to discover and integrate APIs faster than ever.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-blue-100 to-blue-50 text-blue-600 dark-mode:from-blue-900/30 dark-mode:to-blue-900/10 dark-mode:text-blue-400">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Smart API Discovery</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Find APIs by category, functionality, or use case. Filter by pricing, authentication, and popularity to find the perfect API for your project.</p>
+                </div>
+                
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-purple-100 to-purple-50 text-purple-600 dark-mode:from-purple-900/30 dark-mode:to-purple-900/10 dark-mode:text-purple-400">
+                        <i class="fas fa-book text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Unified Documentation</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Access consistent, well-structured documentation for all APIs. Compare endpoints, parameters, and response formats side-by-side.</p>
+                </div>
+                
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-600 dark-mode:from-emerald-900/30 dark-mode:to-emerald-900/10 dark-mode:text-emerald-400">
+                        <i class="fas fa-flask text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Interactive Testing</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Test APIs directly in the browser with our built-in sandbox. No need to set up authentication or write boilerplate code.</p>
+                </div>
+                
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 dark-mode:from-amber-900/30 dark-mode:to-amber-900/10 dark-mode:text-amber-400">
+                        <i class="fas fa-code text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Integration Snippets</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Get ready-to-use code snippets in multiple languages. Copy and paste directly into your project with your API keys already configured.</p>
+                </div>
+                
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-rose-100 to-rose-50 text-rose-600 dark-mode:from-rose-900/30 dark-mode:to-rose-900/10 dark-mode:text-rose-400">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">API Comparison</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Compare similar APIs side-by-side on pricing, rate limits, features, and community ratings to make informed decisions.</p>
+                </div>
+                
+                <div class="section-card card-hover p-10">
+                    <div class="feature-icon bg-gradient-to-br from-cyan-100 to-cyan-50 text-cyan-600 dark-mode:from-cyan-900/30 dark-mode:to-cyan-900/10 dark-mode:text-cyan-400">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Quick Integration</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">One-click integration with popular frameworks and platforms. Generate SDKs, webhook endpoints, and authentication flows instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="py-24 gradient-bg dark-mode:bg-gradient-to-b dark-mode:from-slate-900 dark-mode:to-slate-950">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Explore APIs by Category</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto dark-mode:text-slate-300">Browse thousands of APIs across all major categories. Find exactly what you need for your next project.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-blue-100 to-blue-50 text-blue-600 mx-auto dark-mode:from-blue-900/30 dark-mode:to-blue-900/10 dark-mode:text-blue-400">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">AI & Machine Learning</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">250+ APIs</p>
+                </div>
+                
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-green-100 to-green-50 text-green-600 mx-auto dark-mode:from-green-900/30 dark-mode:to-green-900/10 dark-mode:text-green-400">
+                        <i class="fas fa-credit-card text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Payments</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">180+ APIs</p>
+                </div>
+                
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-purple-100 to-purple-50 text-purple-600 mx-auto dark-mode:from-purple-900/30 dark-mode:to-purple-900/10 dark-mode:text-purple-400">
+                        <i class="fas fa-cloud-sun text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Weather</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">45+ APIs</p>
+                </div>
+                
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 mx-auto dark-mode:from-amber-900/30 dark-mode:to-amber-900/10 dark-mode:text-amber-400">
+                        <i class="fas fa-user-shield text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Authentication</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">90+ APIs</p>
+                </div>
+                
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-rose-100 to-rose-50 text-rose-600 mx-auto dark-mode:from-rose-900/30 dark-mode:to-rose-900/10 dark-mode:text-rose-400">
+                        <i class="fas fa-share-alt text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Social Media</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">150+ APIs</p>
+                </div>
+                
+                <div class="section-card card-hover p-8 text-center">
+                    <div class="category-icon bg-gradient-to-br from-cyan-100 to-cyan-50 text-cyan-600 mx-auto dark-mode:from-cyan-900/30 dark-mode:to-cyan-900/10 dark-mode:text-cyan-400">
+                        <i class="fas fa-map-marked-alt text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Maps & Geolocation</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-400 text-sm">75+ APIs</p>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="#" class="inline-flex items-center px-8 py-4 btn-secondary rounded-xl font-semibold">
+                    <span>View all 25+ categories</span>
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">How API Explorer Works</h2>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto dark-mode:text-slate-300">Get from discovery to integration in four simple steps.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+                <div class="text-center">
+                    <div class="step-number bg-gradient-to-br from-blue-100 to-blue-50 text-blue-600 mx-auto dark-mode:from-blue-900/30 dark-mode:to-blue-900/10 dark-mode:text-blue-400">1</div>
+                    <h3 class="text-2xl font-bold mb-4">Search & Discover</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Find APIs by name, category, or functionality. Use our intelligent filters to narrow down options.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="step-number bg-gradient-to-br from-purple-100 to-purple-50 text-purple-600 mx-auto dark-mode:from-purple-900/30 dark-mode:to-purple-900/10 dark-mode:text-purple-400">2</div>
+                    <h3 class="text-2xl font-bold mb-4">Explore Details</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Review documentation, endpoints, pricing, and authentication requirements in a unified interface.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="step-number bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-600 mx-auto dark-mode:from-emerald-900/30 dark-mode:to-emerald-900/10 dark-mode:text-emerald-400">3</div>
+                    <h3 class="text-2xl font-bold mb-4">Test in Sandbox</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Test API endpoints directly in the browser with our interactive sandbox environment.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="step-number bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 mx-auto dark-mode:from-amber-900/30 dark-mode:to-amber-900/10 dark-mode:text-amber-400">4</div>
+                    <h3 class="text-2xl font-bold mb-4">Integrate & Build</h3>
+                    <p class="text-slate-600 dark-mode:text-slate-300">Copy code snippets, generate SDKs, and integrate the API into your application with minimal setup.</p>
+                </div>
+            </div>
+            
+            <div class="section-card p-12">
+                <div class="flex flex-col lg:flex-row items-center">
+                    <div class="lg:w-2/3 mb-12 lg:mb-0 lg:pr-16">
+                        <h3 class="text-3xl font-bold mb-8">Why Choose API Explorer Over Manual Search?</h3>
+                        <ul class="space-y-6">
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4 flex-shrink-0 dark-mode:bg-green-900/30">
+                                    <i class="fas fa-check text-green-600 dark-mode:text-green-400"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-lg mb-1">Time-saving</div>
+                                    <p class="text-slate-600 dark-mode:text-slate-300">Find the right API in minutes instead of hours of manual research across multiple websites.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4 flex-shrink-0 dark-mode:bg-blue-900/30">
+                                    <i class="fas fa-chart-bar text-blue-600 dark-mode:text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-lg mb-1">Standardized Comparison</div>
+                                    <p class="text-slate-600 dark-mode:text-slate-300">Compare APIs side-by-side with consistent metrics, pricing, and feature breakdowns.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-4 flex-shrink-0 dark-mode:bg-purple-900/30">
+                                    <i class="fas fa-flask text-purple-600 dark-mode:text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-lg mb-1">Testing Without Setup</div>
+                                    <p class="text-slate-600 dark-mode:text-slate-300">Try APIs before signing up or creating accounts with our built-in testing environment.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="lg:w-1/3">
+                        <div class="stats-card">
+                            <div class="text-6xl font-bold gradient-text mb-4">10x</div>
+                            <div class="text-2xl font-bold mb-3 dark-mode:text-white">Faster Integration</div>
+                            <p class="text-slate-600 dark-mode:text-slate-300">Developers integrate APIs 10x faster with our unified platform compared to manual methods.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="py-24 gradient-bg dark-mode:bg-gradient-to-b dark-mode:from-slate-900 dark-mode:to-slate-950">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="max-w-5xl mx-auto text-center section-card p-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8">Start Building with APIs Today</h2>
+                <p class="text-xl text-slate-600 mb-12 max-w-3xl mx-auto dark-mode:text-slate-300">Join thousands of developers who are building faster with API Explorer. Free forever for individual developers.</p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6 mb-16">
+                    <a href="#" class="px-12 py-6 btn-primary rounded-2xl text-xl font-bold shadow-xl">Get Started for Free</a>
+                    <a href="#" class="px-12 py-6 btn-secondary rounded-2xl text-xl font-bold">Schedule a Demo</a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 dark-mode:from-slate-800/50 dark-mode:to-slate-900/50 dark-mode:border-slate-700">
+                        <div class="text-3xl font-bold text-slate-900 mb-2 dark-mode:text-white">50,000+</div>
+                        <div class="text-slate-600 dark-mode:text-slate-300">Active Developers</div>
+                    </div>
+                    
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 dark-mode:from-slate-800/50 dark-mode:to-slate-900/50 dark-mode:border-slate-700">
+                        <div class="text-3xl font-bold text-slate-900 mb-2 dark-mode:text-white">4.9/5</div>
+                        <div class="text-slate-600 dark-mode:text-slate-300">Average Rating</div>
+                    </div>
+                    
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 dark-mode:from-slate-800/50 dark-mode:to-slate-900/50 dark-mode:border-slate-700">
+                        <div class="text-3xl font-bold text-slate-900 mb-2 dark-mode:text-white">Free</div>
+                        <div class="text-slate-600 dark-mode:text-slate-300">Forever Plan Available</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-slate-200 dark-mode:border-slate-800">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col lg:flex-row justify-between mb-12">
+                <div class="mb-12 lg:mb-0">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
+                            <i class="fas fa-code text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-2xl font-bold gradient-text">API Explorer</span>
+                            <div class="text-sm text-slate-600 font-medium dark-mode:text-slate-400">The API Discovery Platform</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 max-w-md dark-mode:text-slate-400">The fastest way for developers to discover, test, and integrate APIs across all categories.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Product</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Features</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Categories</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Pricing</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">API Status</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Developers</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Documentation</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">API Reference</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">SDKs</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Support</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Company</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">About</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Blog</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Careers</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Legal</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Privacy Policy</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Terms of Service</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Cookie Policy</a></li>
+                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-200 dark-mode:border-slate-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-slate-600 mb-6 md:mb-0 dark-mode:text-slate-400">&copy; 2023 API Explorer. All rights reserved. Built for developers by developers.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
+                        <i class="fab fa-discord text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', function() {
+            const body = document.body;
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-mode');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards and category cards
+        document.querySelectorAll('.card-hover, .step-number, .stats-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Search functionality (basic)
+        const searchInput = document.querySelector('.search-box input');
+        const searchButton = document.querySelector('.search-box button');
+        
+        searchButton.addEventListener('click', function() {
+            const query = searchInput.value.trim();
+            if (query) {
+                alert(`Searching for: ${query}\n\nThis is a demo. In a real application, this would trigger an API search.`);
+            }
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+    </script>
+</body>
+</html>

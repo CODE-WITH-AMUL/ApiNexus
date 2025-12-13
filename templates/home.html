@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Explorer Documentation | API Discovery Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .sidebar-item.active {
+            background: #1e293b;
+            border-left: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .sidebar-item:hover:not(.active) {
+            background: #1e293b;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        
+        .code-header {
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            padding: 12px 16px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        pre {
+            margin: 0;
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'SF Mono', Monaco, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .success-badge {
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .error-badge {
+            background: #ef4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .warning-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .info-card {
+            background: #1e293b;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-card {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .success-card {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e293b;
+        }
+        
+        .content-section {
+            scroll-margin-top: 100px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            
+            .sidebar-overlay.open {
+                display: block;
+            }
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="nav-glass fixed top-0 w-full z-50 py-4">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-code text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold gradient-text">API Explorer</span>
+                        <span class="text-sm text-slate-400 ml-2">Docs</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors">API Directory</a>
+                    <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors">Pricing</a>
+                    <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors">Support</a>
+                    <a href="#" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all">Dashboard</a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors">
+                    <i class="fas fa-bars text-slate-300"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <div class="sidebar fixed left-0 top-16 h-screen w-64 bg-slate-900 border-r border-slate-800 overflow-y-auto scrollbar-thin z-30">
+            <div class="p-6">
+                <div class="mb-8">
+                    <h3 class="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-4">Documentation</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#introduction" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors active">
+                                <i class="fas fa-home mr-3"></i>Introduction
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#getting-started" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-rocket mr-3"></i>Getting Started
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-4">Core Concepts</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#authentication" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-key mr-3"></i>Authentication & API Keys
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#making-requests" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-paper-plane mr-3"></i>Making Requests
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#example-code" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-code mr-3"></i>Example Code
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#api-responses" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-reply mr-3"></i>API Responses
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-4">Best Practices</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#best-practices" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-shield-alt mr-3"></i>Best Practices
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#faq" class="sidebar-item block px-4 py-2 rounded-lg text-slate-300 hover:text-white transition-colors">
+                                <i class="fas fa-question-circle mr-3"></i>FAQ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay md:hidden"></div>
+
+        <!-- Main Content -->
+        <div class="flex-1 md:ml-64 min-h-screen">
+            <div class="container mx-auto px-4 md:px-8 py-8 max-w-4xl">
+                
+                <!-- Introduction Section -->
+                <section id="introduction" class="content-section mb-16 pt-8">
+                    <div class="mb-8">
+                        <span class="text-sm font-semibold text-blue-400 uppercase tracking-wider">Documentation</span>
+                        <h1 class="text-4xl md:text-5xl font-bold mt-2 mb-6">API Explorer Documentation</h1>
+                        <p class="text-xl text-slate-300">Learn how to discover, integrate, and use APIs through our platform. From beginners to advanced developers, this documentation covers everything you need.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                        <div class="bg-slate-800 p-6 rounded-xl">
+                            <div class="w-12 h-12 rounded-lg bg-blue-900/30 text-blue-400 flex items-center justify-center mb-4">
+                                <i class="fas fa-search text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Discover APIs</h3>
+                            <p class="text-slate-400">Find thousands of APIs across all categories with our intelligent search and filtering system.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-6 rounded-xl">
+                            <div class="w-12 h-12 rounded-lg bg-purple-900/30 text-purple-400 flex items-center justify-center mb-4">
+                                <i class="fas fa-flask text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Test Instantly</h3>
+                            <p class="text-slate-400">Try APIs directly in your browser with our built-in testing environment.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-6 rounded-xl">
+                            <div class="w-12 h-12 rounded-lg bg-emerald-900/30 text-emerald-400 flex items-center justify-center mb-4">
+                                <i class="fas fa-code text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Integrate Faster</h3>
+                            <p class="text-slate-400">Get production-ready code snippets for all popular programming languages.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-blue-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">What is an API?</h4>
+                                <p class="text-slate-300">API stands for Application Programming Interface. It's a set of rules that allows different software applications to communicate with each other. APIs let you access data and functionality from other services without needing to know how they're implemented internally.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Getting Started Section -->
+                <section id="getting-started" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-rocket text-white"></i>
+                        </span>
+                        Getting Started
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="step-circle">1</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Create an Account</h3>
+                                <p class="text-slate-300 mb-4">Sign up for a free API Explorer account. You'll get access to our entire API directory and testing tools.</p>
+                                <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300">
+                                    <span>Sign up for free</span>
+                                    <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="step-circle">2</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Find Your API</h3>
+                                <p class="text-slate-300 mb-4">Use our search or browse categories to find the API you need. You can filter by functionality, pricing, and authentication type.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="step-circle">3</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Test in Sandbox</h3>
+                                <p class="text-slate-300 mb-4">Try the API directly in your browser with our interactive testing environment. No setup required.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="step-circle">4</div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">Integrate into Your App</h3>
+                                <p class="text-slate-300">Copy the code snippets and integrate the API into your application with minimal configuration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Authentication Section -->
+                <section id="authentication" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-key text-white"></i>
+                        </span>
+                        Authentication & API Keys
+                    </h2>
+                    
+                    <p class="text-slate-300 mb-6">Most APIs require authentication to ensure only authorized users can access them. The most common method is using API keys.</p>
+                    
+                    <div class="info-card">
+                        <div class="flex items-start">
+                            <i class="fas fa-key text-blue-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">What is an API Key?</h4>
+                                <p class="text-slate-300">An API key is a unique identifier that authenticates requests to an API. Think of it like a password that grants you access to the API's functionality. Each key is associated with your account and has specific permissions and rate limits.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Generating Your API Key</h3>
+                    
+                    <div class="mb-8">
+                        <p class="text-slate-300 mb-4">To generate an API key:</p>
+                        <ol class="list-decimal pl-6 space-y-3 text-slate-300">
+                            <li>Navigate to your API Explorer dashboard</li>
+                            <li>Go to "API Keys" in the sidebar</li>
+                            <li>Click "Create New API Key"</li>
+                            <li>Give your key a descriptive name (e.g., "Production Server" or "Development")</li>
+                            <li>Select the permissions your key needs</li>
+                            <li>Copy your key immediately - you won't be able to see it again!</li>
+                        </ol>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Storing API Keys Securely</h3>
+                    
+                    <div class="warning-card">
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Important Security Warning</h4>
+                                <p class="text-slate-300">Never store API keys in client-side code, version control, or public repositories. Exposed API keys can be used by anyone and may result in unexpected charges or data breaches.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-slate-300 mb-4">Best practices for storing API keys:</p>
+                    <ul class="list-disc pl-6 space-y-2 text-slate-300 mb-8">
+                        <li>Use environment variables on your server</li>
+                        <li>Store keys in secure secret management services</li>
+                        <li>Use different keys for development and production</li>
+                        <li>Rotate keys regularly (every 90 days recommended)</li>
+                        <li>Set up IP restrictions when possible</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Sending API Keys in Requests</h3>
+                    
+                    <p class="text-slate-300 mb-4">API keys are typically sent in the request headers. Here's the standard format:</p>
+                    
+                    <div class="code-block mb-8">
+                        <div class="code-header">
+                            <span class="text-slate-400">Authorization Header</span>
+                        </div>
+                        <pre class="text-green-400">Authorization: Bearer YOUR_API_KEY_HERE</pre>
+                    </div>
+                    
+                    <p class="text-slate-300">Some APIs may use different header names like <code class="bg-slate-800 px-2 py-1 rounded text-pink-400">X-API-Key</code> or <code class="bg-slate-800 px-2 py-1 rounded text-pink-400">api_key</code>. Always check the specific API's documentation for the correct format.</p>
+                </section>
+
+                <!-- Making Requests Section -->
+                <section id="making-requests" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-paper-plane text-white"></i>
+                        </span>
+                        Making Requests
+                    </h2>
+                    
+                    <p class="text-slate-300 mb-6">APIs typically use REST (Representational State Transfer) architecture. REST APIs use standard HTTP methods to perform operations on resources.</p>
+                    
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-800">
+                                    <th class="border border-slate-700 p-3 text-left">HTTP Method</th>
+                                    <th class="border border-slate-700 p-3 text-left">Purpose</th>
+                                    <th class="border border-slate-700 p-3 text-left">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="success-badge">GET</span></td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Retrieve data</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Get user profile</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="warning-badge">POST</span></td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Create new data</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Create new user</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="error-badge">PUT</span></td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Update existing data</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Update user details</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="bg-slate-600 px-2 py-1 rounded text-white">DELETE</span></td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Delete data</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Delete user account</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Request Components</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-heading text-blue-400 mr-2"></i>Headers
+                            </h4>
+                            <p class="text-slate-400">Metadata about the request including authentication, content type, and more.</p>
+                            <div class="mt-4 text-sm bg-slate-900 p-3 rounded">
+                                <div class="text-green-400">Content-Type: application/json</div>
+                                <div class="text-green-400">Authorization: Bearer sk_123...</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-search text-purple-400 mr-2"></i>Query Parameters
+                            </h4>
+                            <p class="text-slate-400">Key-value pairs added to the URL for filtering, pagination, and sorting.</p>
+                            <div class="mt-4 text-sm bg-slate-900 p-3 rounded">
+                                <div class="text-cyan-400">?limit=10&page=2&sort=date</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-code text-emerald-400 mr-2"></i>Request Body
+                            </h4>
+                            <p class="text-slate-400">Data sent with POST, PUT, or PATCH requests, typically in JSON format.</p>
+                            <div class="mt-4 text-sm bg-slate-900 p-3 rounded">
+                                <div class="text-yellow-400">{ "name": "John", "email": "john@example.com" }</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Example Requests</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-bold mb-3">GET Request Example</h4>
+                        <p class="text-slate-300 mb-4">Retrieving a list of users with pagination:</p>
+                        
+                        <div class="code-block mb-6">
+                            <div class="code-header">
+                                <span class="text-slate-400">GET /api/v1/users?limit=10&page=1</span>
+                            </div>
+                            <pre class="text-blue-400">
+GET /api/v1/users?limit=10&page=1 HTTP/1.1
+Host: api.example.com
+Authorization: Bearer sk_live_1234567890abcdef
+Content-Type: application/json
+Accept: application/json</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-bold mb-3">POST Request Example</h4>
+                        <p class="text-slate-300 mb-4">Creating a new user:</p>
+                        
+                        <div class="code-block mb-6">
+                            <div class="code-header">
+                                <span class="text-slate-400">POST /api/v1/users</span>
+                            </div>
+                            <pre class="text-green-400">
+POST /api/v1/users HTTP/1.1
+Host: api.example.com
+Authorization: Bearer sk_live_1234567890abcdef
+Content-Type: application/json
+Content-Length: 85
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "user"
+}</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Code Section -->
+                <section id="example-code" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-code text-white"></i>
+                        </span>
+                        Example Code
+                    </h2>
+                    
+                    <p class="text-slate-300 mb-8">Here are practical examples of making API requests in different programming languages. These examples fetch user data from a sample API.</p>
+                    
+                    <div class="mb-12">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-js text-yellow-400 text-2xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">JavaScript (Fetch API)</h3>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header flex justify-between items-center">
+                                <span class="text-slate-400">JavaScript Example</span>
+                                <button class="copy-btn text-sm text-slate-400 hover:text-white" data-target="js-code">
+                                    <i class="far fa-copy mr-1"></i> Copy
+                                </button>
+                            </div>
+                            <pre id="js-code" class="text-gray-300">
+// Fetch users from API
+async function fetchUsers() {
+  const apiKey = process.env.API_KEY; // Store keys in environment variables
+  
+  try {
+    const response = await fetch('https://api.example.com/v1/users', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Users:', data.users);
+    return data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+}
+
+// Create a new user
+async function createUser(userData) {
+  const response = await fetch('https://api.example.com/v1/users', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+  });
+  
+  return await response.json();
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-12">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-python text-blue-400 text-2xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">Python (Requests Library)</h3>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header flex justify-between items-center">
+                                <span class="text-slate-400">Python Example</span>
+                                <button class="copy-btn text-sm text-slate-400 hover:text-white" data-target="python-code">
+                                    <i class="far fa-copy mr-1"></i> Copy
+                                </button>
+                            </div>
+                            <pre id="python-code" class="text-gray-300">
+import os
+import requests
+from typing import Dict, Any
+
+API_KEY = os.environ.get('API_KEY')  # Store keys in environment variables
+BASE_URL = 'https://api.example.com/v1'
+
+def get_users(limit: int = 10, page: int = 1) -> Dict[str, Any]:
+    """
+    Fetch users from the API with pagination
+    """
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+    
+    params = {
+        'limit': limit,
+        'page': page
+    }
+    
+    try:
+        response = requests.get(
+            f'{BASE_URL}/users',
+            headers=headers,
+            params=params
+        )
+        response.raise_for_status()  # Raise exception for bad status codes
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f'Error fetching users: {e}')
+        raise
+
+def create_user(user_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Create a new user via the API
+    """
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'Content-Type': 'application/json'
+    }
+    
+    response = requests.post(
+        f'{BASE_URL}/users',
+        headers=headers,
+        json=user_data
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Example usage
+if __name__ == '__main__':
+    # Get first page of users
+    users = get_users(limit=10, page=1)
+    print(f'Fetched {len(users.get("data", []))} users')
+    
+    # Create a new user
+    new_user = {
+        'name': 'Jane Doe',
+        'email': 'jane@example.com',
+        'role': 'admin'
+    }
+    # created_user = create_user(new_user)
+    # print(f'Created user: {created_user}')</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-12">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-terminal text-green-400 text-2xl mr-3"></i>
+                            <h3 class="text-2xl font-bold">cURL Command Line</h3>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header flex justify-between items-center">
+                                <span class="text-slate-400">cURL Examples</span>
+                                <button class="copy-btn text-sm text-slate-400 hover:text-white" data-target="curl-code">
+                                    <i class="far fa-copy mr-1"></i> Copy
+                                </button>
+                            </div>
+                            <pre id="curl-code" class="text-gray-300">
+# Get users (replace YOUR_API_KEY with your actual key)
+curl -X GET \
+  'https://api.example.com/v1/users?limit=10&page=1' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+# Create a new user
+curl -X POST \
+  'https://api.example.com/v1/users' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user"
+  }'
+
+# Update a user (replace :id with actual user ID)
+curl -X PUT \
+  'https://api.example.com/v1/users/:id' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "John Smith",
+    "email": "john.smith@example.com"
+  }'
+
+# Delete a user
+curl -X DELETE \
+  'https://api.example.com/v1/users/:id' \
+  -H 'Authorization: Bearer YOUR_API_KEY'</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- API Responses Section -->
+                <section id="api-responses" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-reply text-white"></i>
+                        </span>
+                        API Responses
+                    </h2>
+                    
+                    <p class="text-slate-300 mb-6">APIs respond with structured data and HTTP status codes that indicate the result of your request. Understanding these responses is crucial for proper error handling.</p>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Success Response Example</h3>
+                    
+                    <div class="code-block mb-8">
+                        <div class="code-header">
+                            <span class="text-slate-400">HTTP 200 OK - Successful GET request</span>
+                        </div>
+                        <pre class="text-green-400">
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 998
+X-RateLimit-Reset: 1625097600
+
+{
+  "status": "success",
+  "data": {
+    "users": [
+      {
+        "id": "user_123456",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "created_at": "2023-05-15T10:30:00Z",
+        "updated_at": "2023-05-15T10:30:00Z"
+      },
+      {
+        "id": "user_789012",
+        "name": "Jane Smith",
+        "email": "jane@example.com",
+        "created_at": "2023-05-14T14:20:00Z",
+        "updated_at": "2023-05-14T14:20:00Z"
+      }
+    ],
+    "pagination": {
+      "total": 150,
+      "count": 2,
+      "per_page": 10,
+      "current_page": 1,
+      "total_pages": 15
+    }
+  },
+  "message": "Users retrieved successfully"
+}</pre>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Error Response Example</h3>
+                    
+                    <div class="code-block mb-8">
+                        <div class="code-header">
+                            <span class="text-slate-400">HTTP 400 Bad Request - Validation Error</span>
+                        </div>
+                        <pre class="text-red-400">
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "status": "error",
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The request contains invalid data",
+    "details": [
+      {
+        "field": "email",
+        "message": "Email must be a valid email address"
+      },
+      {
+        "field": "password",
+        "message": "Password must be at least 8 characters"
+      }
+    ]
+  },
+  "timestamp": "2023-10-05T14:30:00Z",
+  "request_id": "req_abcdef123456"
+}</pre>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Common HTTP Status Codes</h3>
+                    
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-800">
+                                    <th class="border border-slate-700 p-3 text-left">Status Code</th>
+                                    <th class="border border-slate-700 p-3 text-left">Category</th>
+                                    <th class="border border-slate-700 p-3 text-left">Meaning</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="success-badge">200</span> OK</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Success</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Request succeeded</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="success-badge">201</span> Created</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Success</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Resource created successfully</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="warning-badge">400</span> Bad Request</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Client Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Invalid request syntax or parameters</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="error-badge">401</span> Unauthorized</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Client Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Authentication failed or missing</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="error-badge">403</span> Forbidden</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Client Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Authenticated but not authorized</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="error-badge">404</span> Not Found</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Client Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Resource doesn't exist</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="error-badge">429</span> Too Many Requests</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Client Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Rate limit exceeded</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-slate-700 p-3"><span class="bg-slate-600 px-2 py-1 rounded text-white">500</span> Internal Server Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Server Error</td>
+                                    <td class="border border-slate-700 p-3 text-slate-300">Server encountered an error</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Response Handling Tips</h4>
+                                <ul class="list-disc pl-6 space-y-2 text-slate-300">
+                                    <li>Always check the HTTP status code before processing response data</li>
+                                    <li>Implement proper error handling for different status codes</li>
+                                    <li>Log request IDs when provided for debugging</li>
+                                    <li>Check rate limit headers to avoid hitting limits</li>
+                                    <li>Handle network errors and timeouts gracefully</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Best Practices Section -->
+                <section id="best-practices" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-shield-alt text-white"></i>
+                        </span>
+                        Best Practices
+                    </h2>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Rate Limiting</h3>
+                    
+                    <p class="text-slate-300 mb-4">Most APIs implement rate limiting to prevent abuse and ensure fair usage. You'll typically encounter these limits:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3">Requests Per Minute</h4>
+                            <p class="text-slate-400 text-sm">Limit on how many requests you can make in a 60-second window.</p>
+                            <div class="mt-4 text-lg font-bold text-center text-blue-400">60-1000</div>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3">Daily Limits</h4>
+                            <p class="text-slate-400 text-sm">Total requests allowed per day, often higher for paid plans.</p>
+                            <div class="mt-4 text-lg font-bold text-center text-purple-400">10,000+</div>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3">Burst Limits</h4>
+                            <p class="text-slate-400 text-sm">Short-term limits to prevent sudden spikes in traffic.</p>
+                            <div class="mt-4 text-lg font-bold text-center text-emerald-400">5-10/sec</div>
+                        </div>
+                    </div>
+                    
+                    <div class="success-card mb-8">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Rate Limit Headers</h4>
+                                <p class="text-slate-300">Most APIs include rate limit information in response headers. Check for headers like:</p>
+                                <div class="mt-3 bg-slate-900 p-3 rounded text-sm">
+                                    <div class="text-cyan-400">X-RateLimit-Limit: 1000</div>
+                                    <div class="text-cyan-400">X-RateLimit-Remaining: 850</div>
+                                    <div class="text-cyan-400">X-RateLimit-Reset: 1625097600</div>
+                                    <div class="text-cyan-400">Retry-After: 60</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Security Best Practices</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-check text-green-400 mr-2"></i>Do's
+                            </h4>
+                            <ul class="list-disc pl-6 space-y-2 text-slate-300 text-sm">
+                                <li>Store API keys in environment variables</li>
+                                <li>Use different keys for different environments</li>
+                                <li>Rotate keys regularly (every 90 days)</li>
+                                <li>Implement request timeouts</li>
+                                <li>Validate all API responses</li>
+                                <li>Use HTTPS for all requests</li>
+                                <li>Monitor your API usage</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-slate-800 p-5 rounded-xl">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fas fa-times text-red-400 mr-2"></i>Don'ts
+                            </h4>
+                            <ul class="list-disc pl-6 space-y-2 text-slate-300 text-sm">
+                                <li>Never commit API keys to version control</li>
+                                <li>Don't hardcode keys in client-side code</li>
+                                <li>Avoid sharing keys across team members</li>
+                                <li>Don't ignore rate limit headers</li>
+                                <li>Avoid making synchronous API calls in UI threads</li>
+                                <li>Don't assume APIs are always available</li>
+                                <li>Avoid excessive retries without backoff</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-10 mb-4">Implementation Tips</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-blue-900/50 text-blue-400 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Implement Retry Logic</h4>
+                                <p class="text-slate-300">APIs can fail temporarily. Implement exponential backoff retry logic for transient failures (5xx errors, network issues).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-purple-900/50 text-purple-400 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Cache Responses</h4>
+                                <p class="text-slate-300">Cache API responses when appropriate to reduce load and improve performance. Respect cache-control headers.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-emerald-900/50 text-emerald-400 flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Monitor and Log</h4>
+                                <p class="text-slate-300">Track API usage, error rates, and response times. Log request IDs for debugging production issues.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ Section -->
+                <section id="faq" class="content-section mb-16">
+                    <h2 class="text-3xl font-bold mb-8 flex items-center">
+                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 w-8 h-8 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-question-circle text-white"></i>
+                        </span>
+                        Frequently Asked Questions
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">1. What if I lose my API key?</h3>
+                            <p class="text-slate-300">You can regenerate a new API key from your dashboard. The old key will be immediately deactivated. Always update your applications with the new key before regenerating if possible.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">2. How do I know if I'm approaching my rate limit?</h3>
+                            <p class="text-slate-300">Check the <code class="bg-slate-900 px-2 py-1 rounded text-cyan-400">X-RateLimit-Remaining</code> header in API responses. Most APIs also return a <code class="bg-slate-900 px-2 py-1 rounded text-cyan-400">Retry-After</code> header when you hit the limit.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">3. Can I use APIs in my mobile app?</h3>
+                            <p class="text-slate-300">Yes, but you must never embed API keys directly in mobile apps. Instead, create a backend service that makes API calls on behalf of your app, or use mobile SDKs with proper authentication flows.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">4. What's the difference between test and live API keys?</h3>
+                            <p class="text-slate-300">Test keys work with sandbox environments and don't affect real data or incur charges. Live keys interact with production systems. Always use test keys during development.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">5. How do I handle API versioning?</h3>
+                            <p class="text-slate-300">Most APIs include versioning in the URL path (e.g., <code class="bg-slate-900 px-2 py-1 rounded text-pink-400">/v1/</code>). When APIs update to new versions, you'll have time to migrate. Never assume APIs won't change.</p>
+                        </div>
+                        
+                        <div class="bg-slate-800 rounded-xl p-6">
+                            <h3 class="text-xl font-bold mb-3">6. What should I do if I get a 5xx error?</h3>
+                            <p class="text-slate-300">5xx errors indicate server-side issues. Implement retry logic with exponential backoff. If the issue persists, check the API status page or contact support with the request ID from the error response.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <div class="pt-12 border-t border-slate-800">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-6 md:mb-0">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <i class="fas fa-code text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xl font-bold gradient-text">API Explorer</span>
+                                    <div class="text-sm text-slate-500">Documentation</div>
+                                </div>
+                            </div>
+                            <p class="text-slate-500 text-sm">© 2023 API Explorer. All documentation is licensed under MIT.</p>
+                        </div>
+                        
+                        <div class="flex space-x-6">
+                            <a href="#" class="text-slate-500 hover:text-white">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="#" class="text-slate-500 hover:text-white">
+                                <i class="fab fa-twitter text-xl"></i>
+                            </a>
+                            <a href="#" class="text-slate-500 hover:text-white">
+                                <i class="fab fa-discord text-xl"></i>
+                            </a>
+                            <a href="#" class="text-slate-500 hover:text-white">
+                                <i class="fas fa-book text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+        });
+        
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    
+                    // Close mobile menu if open
+                    sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('open');
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active sidebar item
+                    document.querySelectorAll('.sidebar-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Update active sidebar item on scroll
+        const sections = document.querySelectorAll('.content-section');
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '-100px 0px -50% 0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    sidebarItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('href') === `#${id}`) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+        
+        // Copy code functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const codeElement = document.getElementById(targetId);
+                const codeText = codeElement.textContent;
+                
+                navigator.clipboard.writeText(codeText).then(() => {
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Auto-highlight code on click
+        document.querySelectorAll('pre').forEach(preElement => {
+            preElement.addEventListener('click', function() {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+        });
+        
+        // Theme toggle (if needed)
+        const themeToggle = document.createElement('button');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        themeToggle.className = 'fixed bottom-6 right-6 w-12 h-12 rounded-full bg-slate-800 text-white shadow-lg flex items-center justify-center z-50';
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            themeToggle.innerHTML = document.documentElement.classList.contains('dark') 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+        });
+        document.body.appendChild(themeToggle);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</body>
+</html>

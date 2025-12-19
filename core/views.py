@@ -15,3 +15,8 @@ def home(request):
 
 def document(request):
     return render(request,'content/document.html')
+
+
+
+def apis(request):
+    return render(request, 'api.html')

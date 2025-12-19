@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # Local apps
+    "account",
     "core",
     "api",
 ]
@@ -80,19 +81,23 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "Nexus.wsgi.application"
-
+AUTH_USER_MODEL = 'account.User'
 # -------------------------------------------------------------------
 # DATABASE  (❗ UNCHANGED AS REQUESTED)
 # -------------------------------------------------------------------
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "ENGINE": env("DB_ENGINE"),
         "NAME": env(
-            "DB_NAME",
-            default=BASE_DIR / "db.sqlite3"
+            "DB_NAME"
         ),
     }
 }
+
+# -------------------------------------------------------------------
+# AUTHENTICATION
+# -------------------------------------------------------------------
+AUTH_USER_MODEL = "account.User"
 
 # -------------------------------------------------------------------
 # PASSWORD VALIDATION

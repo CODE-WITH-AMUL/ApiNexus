@@ -14,26 +14,17 @@ env = environ.Env(
     DJANGO_DEBUG=(bool, False),
 )
 
-# Load .env ONLY if it exists (local dev)
+# Load .env only if it exists
 env_file = BASE_DIR / ".env"
 if env_file.exists():
-    environ.Env.read_env(str(env_file))  # IMPORTANT: str() required
+    environ.Env.read_env(str(env_file))
 
 # -------------------------------------------------------------------
 # SECURITY
 # -------------------------------------------------------------------
-SECRET_KEY = env("DJANGO_KEY", default="unsafe-secret-key-for-dev-only")
-
-DEBUG = env.bool("DJANGO_DEBUG", default=False)
-
-ALLOWED_HOSTS = env.list(
-    "DJANGO_ALLOWED_HOSTS",
-    default=[
-        "localhost",
-        "127.0.0.1",
-        "apinexus.onrender.com",
-    ],
-)
+SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key-for-dev-only")
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost"])
 
 # -------------------------------------------------------------------
 # APPLICATION DEFINITION
@@ -45,12 +36,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
 
-    # Local apps
+LOCAL_APPS = [
     "account",
     "core",
     "api",
 ]
+
+INSTALLED_APPS += LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -64,11 +58,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "Nexus.urls"
 
+# -------------------------------------------------------------------
+# TEMPLATES
+# -------------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
+        "APP_DIRS": env.bool("TEMPLATE_APP_DIRS", default=True),
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -81,26 +78,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "Nexus.wsgi.application"
-AUTH_USER_MODEL = 'account.User'
+
 # -------------------------------------------------------------------
-# DATABASE  (❗ UNCHANGED AS REQUESTED)
+# DATABASE
 # -------------------------------------------------------------------
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE"),
-        "NAME": env(
-            "DB_NAME"
-        ),
+        "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": env("DB_NAME", default=str(BASE_DIR / "db.sqlite3")),
     }
 }
 
 # -------------------------------------------------------------------
-# AUTHENTICATION
-# -------------------------------------------------------------------
-AUTH_USER_MODEL = "account.User"
-
-# -------------------------------------------------------------------
-# PASSWORD VALIDATION
+# AUTHENTICATION & PASSWORD VALIDATION
 # -------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -127,34 +117,26 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # -------------------------------------------------------------------
 # SECURITY SETTINGS (RENDER / PRODUCTION)
 # -------------------------------------------------------------------
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://apinexus.onrender.com",
-]
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS_KEY", default=[])
+SECURE_PROXY_SSL_HEADER = tuple(env.list("SECURE_PROXY_SSL_HEADER_KEY", default=[]))
 
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
-X_FRAME_OPTIONS = "DENY"
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = env("X_FRAME_OPTIONS_KEY", default="DENY")
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("SECURE_CONTENT_TYPE_NOSNIFF_KEY", default=True)
+SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER_KEY", default=True)
 
 # -------------------------------------------------------------------
-# LOGGING (IMPORTANT FOR RENDER)
+# LOGGING (Render Friendly)
 # -------------------------------------------------------------------
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
+        "console": {"class": "logging.StreamHandler"},
     },
-    "root": {
-        "handlers": ["console"],
-        "level": "INFO",
-    },
+    "root": {"handlers": ["console"], "level": "INFO"},
 }
 
 # -------------------------------------------------------------------

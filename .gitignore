@@ -1,9 +1,70 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
 
+# -------------------------
+# Virtual Environment
+# -------------------------
+venv/
+ENV/
+env/
+*.venv/
 
-
-
-/venv
-
+# -------------------------
+# Environment Variables
+# -------------------------
 .env
 
-.db.sqlite3
+# -------------------------
+# Django / Database
+# -------------------------
+*.sqlite3
+db.sqlite3
+staticfiles/
+media/
+
+# -------------------------
+# Logs
+# -------------------------
+*.log
+
+# -------------------------
+# IDEs / Editors
+# -------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# -------------------------
+# OS Files
+# -------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -------------------------
+# Coverage / Testing
+# -------------------------
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+
+# -------------------------
+# Node / Frontend (Optional if using npm/yarn)
+# -------------------------
+node_modules/
+npm-debug.log
+yarn-error.log

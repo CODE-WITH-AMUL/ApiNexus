@@ -8,10 +8,6 @@ def index(request):
 	return render(request,'index.html')
 
 
-@login_required
-def home(request):
-    return render(request,'home.html')
-
 
 def document(request):
     return render(request,'content/document.html')

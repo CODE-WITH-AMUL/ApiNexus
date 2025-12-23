@@ -13,32 +13,11 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="nav-glass fixed top-0 w-full z-50 py-4">
-        <div class="container mx-auto px-4 md:px-8">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div>
-                        <span class="text-2xl font-bold gradient-text">API HUB</span>
-                        <div class="text-xs text-slate-500 font-medium">For Developers</div>
-                    </div>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-10">
-                    <a href="#features" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Features</a>
-                    <a href="#categories" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Categories</a>
-                    <a href="#how-it-works" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">How it Works</a>
-                    <a href="{% url 'document' %}" class="text-slate-700 hover:text-blue-600 font-medium transition-colors dark-mode:text-slate-300">Documentation</a>
-                
-                <div class="flex items-center space-x-4">
-                    <button id="theme-toggle" class="p-3 rounded-xl bg-gradient-to-br from-slate-100 to-white shadow-sm hover:shadow-md transition-all border border-slate-200 dark-mode:from-slate-800 dark-mode:to-slate-900 dark-mode:border-slate-700">
-                        <i class="fas fa-moon text-slate-700 dark-mode:text-slate-300"></i>
-                    </button>
-                    <a href="#cta" class="px-6 py-3 btn-primary rounded-xl font-medium shadow-sm">Get Started</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<!-- HEADER -->
+{% include 'component/navbar.html' %}
 
+{% block blockname %}{% endblock blockname %}
+    
     <!-- Hero Section -->
     <section class="pt-32 pb-24 md:pt-40 md:pb-32">
         <div class="container mx-auto px-4 md:px-8">
@@ -344,84 +323,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-16 border-t border-slate-200 dark-mode:border-slate-800">
-        <div class="container mx-auto px-4 md:px-8">
-            <div class="flex flex-col lg:flex-row justify-between mb-12">
-                <div class="mb-12 lg:mb-0">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
-                            <i class="fas fa-code text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <span class="text-2xl font-bold gradient-text">API Explorer</span>
-                            <div class="text-sm text-slate-600 font-medium dark-mode:text-slate-400">The API Discovery Platform</div>
-                        </div>
-                    </div>
-                    <p class="text-slate-600 max-w-md dark-mode:text-slate-400">The fastest way for developers to discover, test, and integrate APIs across all categories.</p>
-                </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
-                    <div>
-                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Product</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Features</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Categories</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Pricing</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">API Status</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Developers</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Documentation</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">API Reference</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">SDKs</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Support</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Company</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">About</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Blog</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Careers</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Contact</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-lg mb-6 dark-mode:text-white">Legal</h4>
-                        <ul class="space-y-4">
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Privacy Policy</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Terms of Service</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Cookie Policy</a></li>
-                            <li><a href="#" class="text-slate-600 hover:text-blue-600 transition-colors dark-mode:text-slate-400">Security</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="pt-8 border-t border-slate-200 dark-mode:border-slate-800 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-slate-600 mb-6 md:mb-0 dark-mode:text-slate-400">&copy; 2025 API Explorer. All rights reserved. Built for developers by developers.</p>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
-                        <i class="fab fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
-                        <i class="fab fa-github text-xl"></i>
-                    </a>
-                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
-                        <i class="fab fa-linkedin text-xl"></i>
-                    </a>
-                    <a href="#" class="text-slate-600 hover:text-blue-600 dark-mode:text-slate-400">
-                        <i class="fab fa-discord text-xl"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+{% include 'component/footer.html' %}
+
+{% block footer %}{% endblock footer %}
 
 
 

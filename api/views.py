@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from django.core.paginator import Paginator
 from .models import PublicAPI, Category, Tag
 from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     """Homepage view with all APIs, filtering, and pagination"""
@@ -83,6 +84,8 @@ class TagListView(ListView):
         return Tag.objects.annotate(api_count=Count('apis')).order_by('name')
 
 
+
+@login_required(login_url='login')
 def ViewAPi(request, slug):
     """API detail page"""
     api = get_object_or_404(PublicAPI, slug=slug)

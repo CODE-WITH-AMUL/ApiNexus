@@ -9,6 +9,7 @@ AUTH_CHOICES = (
 
 
 class Tag(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     slug = models.SlugField(unique=True)
 
@@ -17,6 +18,7 @@ class Tag(models.Model):
 
 
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     slug = models.SlugField(unique=True)
 
